@@ -1,0 +1,68 @@
+# Real-Web Agent Harness Quality Lab 总体计划书
+
+## 1. 项目定位
+
+本项目不是重新做一个普通 Browser Agent Demo，而是基于已有 WebUI 自动化 Agent 经验，抽象出一个可运行、可评测、可追踪、可回放、可持续优化的 Agent Harness。
+
+项目核心目标：
+
+> 在真实 Web 页面与本地可控页面上，构建一套 Agent 执行、上下文构造、结构化动作生成、Playwright 执行、Trace 记录、Evaluator 评测、Badcase 回流与模型服务可替换的最小工程闭环。
+
+最终要服务两个目标：
+
+1. 通过实操理解 Agent Harness、Context Engineering、Tool / Skill、Trace、Evaluator、Badcase Feedback 等模块；
+2. 把项目过程中遇到的问题沉淀成可面试表达的“AI 应用工程化 + 测试开发质量保障”经验。
+
+---
+
+## 2. 当前机器与部署约束
+
+### 2.1 MacBook Air
+
+Mac 作为主控开发机。
+
+职责：
+
+- 项目主代码开发；
+- Python / FastAPI / Playwright 运行环境；
+- Browser Harness；
+- Context Collector；
+- Planner 客户端；
+- Executor；
+- Trace Store；
+- Evaluator；
+- Report / Dashboard；
+- Git 提交与版本管理。
+
+当前约束：
+
+- 新电脑，Python 环境尚未完整配置；
+- 已有 Trae 和 Codex；
+- 优先使用 uv 管理 Python 项目；
+- 不建议一开始在 Mac 上跑大模型；
+- 可以在 Mac 本地用小模型做 smoke test，但不作为主推理服务。
+
+### 2.2 Windows 台式机
+
+Windows 作为模型推理机。
+
+职责：
+
+- 部署 Ollama；
+- 运行本地模型；
+- 对 Mac 暴露 HTTP 推理接口；
+- 后续也可从 Git 拉取项目，独立执行完整链路。
+
+推荐模型：
+
+- `qwen2.5-coder:1.5b`：最小 smoke test；
+- `qwen2.5-coder:3b`：优先主力模型；
+- `qwen2.5-coder:7b`：后续对照实验使用；
+- 14B 及以上暂不作为当前阶段目标。
+
+### 2.3 网络策略
+
+第一阶段使用同一局域网通信：
+
+```text
+Mac Harness → http://<Windows_IP>:11434 → Windows Ollama
